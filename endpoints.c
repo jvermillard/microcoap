@@ -50,6 +50,25 @@ static const coap_endpoint_path_t path_lightR2 = {2, {"color2","R"}};
 static const coap_endpoint_path_t path_lightG2 = {2, {"color2","G"}};
 static const coap_endpoint_path_t path_lightB2 = {2, {"color2","B"}};
 
+
+static const coap_endpoint_path_t path_temp = {2,{"analog","temperature"}};
+static const coap_endpoint_path_t path_lum = {2,{"analog","luminosity"}};
+
+static int handle_get_temp(coap_rw_buffer_t *scratch, const coap_packet_t *inpkt, coap_packet_t *outpkt, uint8_t id_hi, uint8_t id_lo)
+{
+    char tmp[30];
+    sprintf(tmp,"%d",readTemp());
+    return coap_make_response(scratch, outpkt, (const uint8_t *)&tmp, strlen(tmp), id_hi, id_lo, COAP_RSPCODE_CONTENT, COAP_CONTENTTYPE_TEXT_PLAIN);
+}
+
+static int handle_get_lum(coap_rw_buffer_t *scratch, const coap_packet_t *inpkt, coap_packet_t *outpkt, uint8_t id_hi, uint8_t id_lo)
+{
+    char tmp[30];
+    sprintf(tmp,"%d",readLum());
+    return coap_make_response(scratch, outpkt, (const uint8_t *)&tmp, strlen(tmp), id_hi, id_lo, COAP_RSPCODE_CONTENT, COAP_CONTENTTYPE_TEXT_PLAIN);
+}
+
+
 static int handle_get_lightR1(coap_rw_buffer_t *scratch, const coap_packet_t *inpkt, coap_packet_t *outpkt, uint8_t id_hi, uint8_t id_lo)
 {
     char tmp[30];
@@ -185,6 +204,9 @@ const coap_endpoint_t endpoints[] =
     {COAP_METHOD_PUT, handle_put_lightG2, &path_lightG2, NULL},
     {COAP_METHOD_GET, handle_get_lightB2, &path_lightB2, "ct=0"},
     {COAP_METHOD_PUT, handle_put_lightB2, &path_lightB2, NULL},
+    {COAP_METHOD_GET, handle_get_temp, &path_temp,"ct=0"},
+    {COAP_METHOD_GET, handle_get_lum, &path_lum,"ct=0"},
+
     {(coap_method_t)0, NULL, NULL, NULL}
 
 };

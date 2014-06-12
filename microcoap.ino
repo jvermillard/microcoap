@@ -59,6 +59,14 @@ extern "C" {
     g2=g;
     b2=b;
   }
+  
+  int readTemp() {
+    return analogRead(A5);
+  }
+  
+  int readLum() {
+    return analogRead(A4);
+  }
 }
 
 void setup()
@@ -167,6 +175,7 @@ void loop()
         strip.setPixelColor(i, strip.Color(r,g,b));
       }  
     }
+    
     
    // Serial.print("IT: ");
    // Serial.println(it);
